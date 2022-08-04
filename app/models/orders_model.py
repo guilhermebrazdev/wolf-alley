@@ -4,11 +4,12 @@ from dataclasses import dataclass
 
 @dataclass
 class Order(db.Model):
+    __tablename__ = "orders"
 
     id: int
     date: str
     price: int
 
-    id: Column(Integer, primary_key=True, nullable=False)
-    date: Column(Date, nullable=False)
-    price: Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True)
+    date = Column(Date, nullable=False)
+    price = Column(Integer, nullable=False)

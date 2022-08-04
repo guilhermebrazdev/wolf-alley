@@ -1,8 +1,8 @@
-"""criar clients table
+"""create client table
 
-Revision ID: b4e222623def
-Revises: 
-Create Date: 2022-07-26 20:51:20.129231
+Revision ID: 144388439250
+Revises: 629be1e9a1b2
+Create Date: 2022-08-04 15:56:15.877779
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b4e222623def'
-down_revision = None
+revision = '144388439250'
+down_revision = '629be1e9a1b2'
 branch_labels = None
 depends_on = None
 

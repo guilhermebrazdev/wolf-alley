@@ -3,7 +3,7 @@ from sqlalchemy import Column, Date, Integer, String
 from dataclasses import dataclass
 
 @dataclass
-class ClientsModel(db.Model):
+class Client(db.Model):
 
     __tablename__ = "clients"
 

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Product(db.Model):
+    
     __tablename__ = "products"
 
     id: int
@@ -16,5 +17,5 @@ class Product(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
-    available_amount = Column(Integer, default= 0)
+    available_amount = Column(Integer, default=0)
     category = Column(String, ForeignKey("categories.name"))

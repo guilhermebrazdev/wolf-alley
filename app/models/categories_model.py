@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Category(db.Model):
+    
     __tablename__ = "categories"
 
     name: str

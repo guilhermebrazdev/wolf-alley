@@ -1,4 +1,5 @@
-from .clients_model import Client
-from .products_model import Product
 from .categories_model import Category
+from .products_model import Product
 from .orders_model import Order
+from .clients_model import Client
+from .client_orders_model import ClientOrder

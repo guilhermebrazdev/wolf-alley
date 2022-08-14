@@ -11,3 +11,5 @@ class Category(db.Model):
     name: str
 
     name = Column(String, primary_key=True)
+
+    

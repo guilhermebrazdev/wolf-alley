@@ -1,4 +1,4 @@
-"""create productOrders table
+"""create product_orders table
 
 Revision ID: cf03c5208d80
 Revises: 8069b3538d1c

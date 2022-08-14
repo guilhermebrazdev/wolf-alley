@@ -6,3 +6,4 @@ from .client_orders_model import ClientOrder
 from .product_orders_model import ProductOrder
 from .sold_products_model import SoldProduct
 from .all_orders_model import AllOrder
+from .sold_orders_model import SoldOrder

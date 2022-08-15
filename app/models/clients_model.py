@@ -1,5 +1,6 @@
 from app.configs.database import db
 from sqlalchemy import Column, Date, Integer, String
+from sqlalchemy.orm import relationship
 from dataclasses import dataclass
 
 @dataclass
@@ -18,3 +19,5 @@ class Client(db.Model):
     email = Column(String, nullable=False, unique=True)
     cpf = Column(String(11), nullable=False, unique=True)
     birthday = Column(Date, nullable=False)
+
+    orders = relationship("Order", back_populates="costumer")

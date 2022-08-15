@@ -1,5 +1,6 @@
 from app.configs.database import db
 from sqlalchemy import Column, Integer, Date, String, Boolean
+from sqlalchemy.orm import relationship
 from dataclasses import dataclass
 
 @dataclass
@@ -21,4 +22,6 @@ class AllOrder(db.Model):
     active_client = Column(Boolean, nullable=False)
     order_id = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
+
+    sold_products = relationship("SoldProduct", back_populates="all_orders")
 

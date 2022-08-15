@@ -1,5 +1,6 @@
 from app.configs.database import db
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from dataclasses import dataclass
 
 @dataclass
@@ -17,3 +18,5 @@ class SoldProduct(db.Model):
     price = Column(Integer, nullable=False)
     category = Column(String, ForeignKey("categories.name"))
     product_id = Column(Integer, nullable=False) 
+
+    all_orders = relationship("AllOrder", back_populates="sold_products")

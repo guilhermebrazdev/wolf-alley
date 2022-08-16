@@ -5,3 +5,4 @@ bp = Blueprint("clients", __name__, url_prefix="/clients")
 
 
 bp.get("")(client_controller.retrieve_clients)
+bp.post("")(client_controller.insert_client)

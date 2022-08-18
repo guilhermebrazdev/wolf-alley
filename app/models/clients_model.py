@@ -20,4 +20,4 @@ class Client(db.Model):
     cpf = Column(String(11), nullable=False, unique=True)
     birthday = Column(Date, nullable=False)
 
-    orders = relationship("Order", back_populates="costumer")
+    # orders = relationship("Order", back_populates="costumer")

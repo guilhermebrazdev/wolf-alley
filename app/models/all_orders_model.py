@@ -23,5 +23,5 @@ class AllOrder(db.Model):
     order_id = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
 
-    sold_products = relationship("SoldProduct", back_populates="all_orders")
+    # sold_products = relationship("SoldProduct", back_populates="all_orders")
 

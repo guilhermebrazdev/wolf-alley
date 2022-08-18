@@ -15,4 +15,4 @@ class Order(db.Model):
     date = Column(Date, nullable=False)
     price = Column(Integer, nullable=False)
 
-    costumer = relationship("Client", back_populates="orders", uselist=False)
+    # costumer = relationship("Client", back_populates="orders", uselist=False)

@@ -19,4 +19,4 @@ class SoldProduct(db.Model):
     category = Column(String, ForeignKey("categories.name"))
     product_id = Column(Integer, nullable=False) 
 
-    all_orders = relationship("AllOrder", back_populates="sold_products")
+    # all_orders = relationship("AllOrder", back_populates="sold_products")

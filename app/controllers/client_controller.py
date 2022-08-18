@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from pydoc import cli
 from flask import request, jsonify
 from sqlalchemy.orm.session import Session
 from app.configs.database import db

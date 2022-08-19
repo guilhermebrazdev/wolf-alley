@@ -88,6 +88,9 @@ def update_client(client_cpf: str):
     
     except WrongKeys:
         return {"error": "Chaves inválidas!"}, HTTPStatus.BAD_REQUEST
+    
+    except InvalidValues:
+        return {"error": "Valores inválidos!"}, HTTPStatus.BAD_REQUEST
    
     except CpfInvalid:
         return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST

@@ -9,3 +9,6 @@ class CpfInvalid(Exception):
 
 class ClientNotFound(Exception):
     ...
+
+class ProductNotFound(Exception):
+    ...

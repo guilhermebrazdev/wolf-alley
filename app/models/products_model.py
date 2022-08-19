@@ -15,7 +15,7 @@ class Product(db.Model):
     category: str
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     price = Column(Integer, nullable=False)
     available_amount = Column(Integer, default=0)
     category = Column(String, ForeignKey("categories.name"))

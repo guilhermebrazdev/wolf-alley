@@ -40,7 +40,7 @@ def update_data(payload: dict):
             raise WrongKeys
         
         if type(payload[key]) != str:
-            WrongKeys
+            InvalidValues
 
         if key == "name":
             payload[key] = payload[key].title()

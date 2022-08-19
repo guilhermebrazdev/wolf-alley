@@ -15,7 +15,6 @@ def insert_product():
     data = request.get_json()
 
     try:
-
         data = product_services.check_keys(data)
         product_services.check_category(data)
 

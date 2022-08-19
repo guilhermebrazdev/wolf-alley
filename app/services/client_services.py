@@ -1,11 +1,11 @@
 from pydoc import cli
 from app.configs.database import db
-from app.exceptions import ClientNotFound, CpfInvalid, InvalidValues, WrongKeys 
+from app.exceptions import ClientNotFound, CpfInvalid, InvalidValues, ProductNotFound, UndefinedQuantity, WrongKeys 
 
 
 from sqlalchemy.orm.session import Session
 
-from app.models.clients_model import Client
+from app.models import Client, Product 
 
 
 
@@ -70,3 +70,57 @@ def verify_client(client_cpf: str):
         raise ClientNotFound
 
     return client
+
+
+def checkout_keys(data: dict):
+    data_keys = data.keys()
+    default_keys = ['products']
+
+    if set(default_keys) != set(data_keys):
+        raise WrongKeys
+
+    if type(data['products']) != list:
+        raise InvalidValues 
+
+    for product in data["products"]:
+
+        if type(product) != dict:
+            raise WrongKeys
+        
+        product_default_keys = ['product_id', 'quantity']
+        product_keys = product.keys()
+        
+        if set(product_keys) != set(product_default_keys):
+            raise WrongKeys
+        
+        for key in product_keys:
+
+            if type(product[key]) != int: 
+                raise InvalidValues
+                
+            if key == 'quantity':
+                if product[key] <= 0 :
+                    raise UndefinedQuantity
+
+    return data
+
+def packing_products(products: list):
+    session: Session = db.session()
+
+    all_buying_products = []
+
+    for each_product in products:
+        product = session.query(Product).get(each_product['product_id'])
+        print(f"{product.id=}")
+        
+        if not product:
+            raise ProductNotFound
+
+        print(f"{product.id=}")
+
+        # product.quantity = each_product['quantity']
+
+        if product not in all_buying_products:
+            all_buying_products.append(product)
+
+    return all_buying_products

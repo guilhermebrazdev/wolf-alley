@@ -101,6 +101,20 @@ def update_client(client_cpf: str):
     return jsonify(client),HTTPStatus.OK
 
 
+def checkout(client_id: int):
+    print("-"*100)
+
+    data = request.get_json()
+
+    data = client_services.checkout_keys(data)
+    all_buying_products = client_services.packing_products(data['products'])
+
+    # print(f"{all_buying_products=}")
+
+    print("-"*100)
+    return {"code": "so nas compritas"}, HTTPStatus.OK
+
+
 def delete_client(client_cpf: str):
     try:
         session: Session = db.session()

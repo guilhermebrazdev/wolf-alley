@@ -12,3 +12,6 @@ class ClientNotFound(Exception):
 
 class ProductNotFound(Exception):
     ...
+
+class UndefinedQuantity(Exception):
+    ...

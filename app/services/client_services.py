@@ -1,11 +1,11 @@
 from pydoc import cli
 from app.configs.database import db
-from app.exceptions import ClientNotFound, CpfInvalid, InvalidValues, ProductNotFound, UndefinedQuantity, WrongKeys 
+from app.exceptions import ClientNotFound, CpfInvalid, DuplicateProduct, InvalidValues, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys 
 
 
 from sqlalchemy.orm.session import Session
 
-from app.models import Client, Product 
+from app.models import Client, Product, ProductOrder, ClientOrder
 
 
 
@@ -104,6 +104,7 @@ def checkout_keys(data: dict):
 
     return data
 
+
 def packing_products(products: list):
     session: Session = db.session()
 
@@ -111,16 +112,98 @@ def packing_products(products: list):
 
     for each_product in products:
         product = session.query(Product).get(each_product['product_id'])
-        print(f"{product.id=}")
+        # print(f"{product.id=}")
         
         if not product:
             raise ProductNotFound
 
-        print(f"{product.id=}")
+        product = product.__dict__
 
-        # product.quantity = each_product['quantity']
+        product = {key: value for key, value in product.items() if key != '_sa_instance_state' }
 
-        if product not in all_buying_products:
-            all_buying_products.append(product)
+        product['quantity'] = each_product['quantity']
+
+        
+        all_buying_products.append(product)
 
     return all_buying_products
+
+
+def checking_duplicates(products: list):
+    product_id_list = [product['id'] for product in products]
+
+    product_list_check = []
+
+    for product_id in product_id_list:
+        if product_id not in product_list_check:
+            product_list_check.append(product_id)
+        else:
+            raise DuplicateProduct 
+        
+    return products
+    
+
+def check_available_amount(products: list):
+    for product in products:
+
+        if product['available_amount'] < product['quantity']:
+            raise UnavailableProduct
+
+def calculate_price(products: list):
+    session: Session = db.session()
+
+    total_price = 0
+
+    check_available_amount(products) 
+
+    for product in products:
+
+        current_product = session.query(Product).get(product['id'])
+        # current_product = Product.query.get(product['id'])
+
+        # print(f"{current_product=}")
+
+        remaining_products = current_product.available_amount - product['quantity']
+        # print(f"{remaining_products=}")
+
+        setattr(current_product, "available_amount", remaining_products )
+
+        total_price += (product['price'] * product['quantity'])
+
+    session.commit()
+
+    return total_price
+
+
+def register_products_order(products: list, order_id: int):
+    session: Session = db.session()
+
+    for product in products:
+        print(f"{product=}")
+
+        product_order_data = {
+            "order_id": order_id,
+            "product_id": product['id'],
+            "amount": product['quantity']
+        }
+
+        product_order = ProductOrder(**product_order_data)
+        
+        session.add(product_order)
+        session.commit()
+
+
+
+
+def register_client_order(client_id: int, order_id: int):
+    session: Session = db.session()
+
+    client_order_data = {
+        "order_id": order_id,
+        "client_id": client_id
+    }
+
+    client_order = ClientOrder(**client_order_data)
+
+    session.add(client_order)
+    session.commit()

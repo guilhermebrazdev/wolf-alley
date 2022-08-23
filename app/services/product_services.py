@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.configs.database import db 
 from app.exceptions import InvalidValues, ProductNotFound, WrongKeys
-from app.models import Category, Product
+from app.models import Category, Product 
 
 def check_keys(data: dict):
     data_keys = data.keys()

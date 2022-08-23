@@ -15,3 +15,9 @@ class ProductNotFound(Exception):
 
 class UndefinedQuantity(Exception):
     ...
+
+class DuplicateProduct(Exception):
+    ...
+
+class UnavailableProduct(Exception):
+    ...

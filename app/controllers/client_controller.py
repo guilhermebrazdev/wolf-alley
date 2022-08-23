@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
 from app.exceptions import ClientNotFound, CpfInvalid, InvalidValues, WrongKeys
 
-from app.models.clients_model import Client
+from app.models import Client, Order
 from app.services import client_services
 
 
@@ -103,13 +103,30 @@ def update_client(client_cpf: str):
 
 def checkout(client_id: int):
     print("-"*100)
+    session: Session = db.session()
 
     data = request.get_json()
 
     data = client_services.checkout_keys(data)
     all_buying_products = client_services.packing_products(data['products'])
 
-    # print(f"{all_buying_products=}")
+    buying_products = client_services.checking_duplicates(all_buying_products)
+
+    total_price = client_services.calculate_price(buying_products)
+
+    order_data = {"price": total_price}
+    # print(f"{order_data=}")
+
+    order = Order(**order_data)
+    # print(f"{order=}")
+
+    session.add(order)
+    session.commit()
+
+    print(f"{order.id=}")
+    client_services.register_products_order(buying_products, order.id)
+    client_services.register_client_order(client_id, order.id)
+
 
     print("-"*100)
     return {"code": "so nas compritas"}, HTTPStatus.OK

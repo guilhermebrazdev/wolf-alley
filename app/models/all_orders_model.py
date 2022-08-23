@@ -1,3 +1,4 @@
+from datetime import datetime
 from app.configs.database import db
 from sqlalchemy import Column, Integer, Date, String, Boolean
 from sqlalchemy.orm import relationship
@@ -6,6 +7,8 @@ from dataclasses import dataclass
 @dataclass
 class AllOrder(db.Model):
     __tablename__ = "all_orders"
+
+    current_date = datetime.now().strftime("%d/%m/%Y %I:%M:%S %p")
 
     id: int
     date: Date
@@ -16,7 +19,7 @@ class AllOrder(db.Model):
     price: int
     
     id = Column(Integer, primary_key=True)
-    date = Column(Date, nullable=False)
+    date = Column(Date, default=current_date)
     client_name = Column(String, nullable=False)
     client_cpf = Column(String, nullable=False)
     active_client = Column(Boolean, nullable=False)

@@ -5,7 +5,7 @@ from app.configs.database import db
 
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
-from app.exceptions import ClientNotFound, CpfInvalid, InvalidValues, WrongKeys
+from app.exceptions import ClientNotFound, CpfInvalid, DuplicateProduct, InvalidValues, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys
 
 from app.models import Client, Order
 from app.services import client_services
@@ -101,35 +101,69 @@ def update_client(client_cpf: str):
     return jsonify(client),HTTPStatus.OK
 
 
-def checkout(client_id: int):
-    print("-"*100)
+def checkout(client_cpf: str):
     session: Session = db.session()
 
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    data = client_services.checkout_keys(data)
-    all_buying_products = client_services.packing_products(data['products'])
+        client = client_services.verify_client(client_cpf)
 
-    buying_products = client_services.checking_duplicates(all_buying_products)
+        data = client_services.checkout_keys(data)
 
-    total_price = client_services.calculate_price(buying_products)
+        all_buying_products = client_services.packing_products(data['products'])
 
-    order_data = {"price": total_price}
-    # print(f"{order_data=}")
+        buying_products = client_services.checking_duplicates(all_buying_products)
 
-    order = Order(**order_data)
-    # print(f"{order=}")
+        total_price = client_services.calculate_price(buying_products)
 
-    session.add(order)
-    session.commit()
+        order_data = {"price": total_price}
 
-    print(f"{order.id=}")
-    client_services.register_products_order(buying_products, order.id)
-    client_services.register_client_order(client_id, order.id)
+        order = Order(**order_data)
+        session.add(order)
 
+        session.commit()
 
-    print("-"*100)
-    return {"code": "so nas compritas"}, HTTPStatus.OK
+        all_order = client_services.register_all_order(client, order, total_price)
+        client_services.register_products_order(buying_products, order.id, all_order.id)
+        client_services.register_client_order(client.id, order.id)
+
+        checkout_return ={
+            "order_id": order.id,
+            "client_cpf": client.cpf,
+            "products": buying_products,
+            "date": order.date
+        }
+
+    except CpfInvalid:
+        return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST
+    
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado!"}, HTTPStatus.NOT_FOUND
+    
+    except WrongKeys:
+        return {"error": "Chaves inválidas!"}, HTTPStatus.BAD_REQUEST
+    
+    except InvalidValues:
+        return {"error": "Valores inválidos!"}, HTTPStatus.BAD_REQUEST
+    
+    except UndefinedQuantity:
+        return {"error": "A quantidade deve ser um valor inteiro e maior que zero!"}, HTTPStatus.UNPROCESSABLE_ENTITY
+    
+    except ProductNotFound:
+        return {"error": "Produto não encontrado!"}, HTTPStatus.NOT_FOUND
+
+    except DuplicateProduct:
+        return {
+            "error": "Produto pedido mais de uma vez na mesma compra, considere incrementar a quantidade"
+        }, HTTPStatus.UNPROCESSABLE_ENTITY
+
+    except UnavailableProduct:
+        return {
+            "error": "Produto não disponível ou demanda excedente ao estoque"
+        }, HTTPStatus.UNPROCESSABLE_ENTITY
+        
+    return checkout_return, HTTPStatus.OK
 
 
 def delete_client(client_cpf: str):

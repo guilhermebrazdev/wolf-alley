@@ -1,4 +1,5 @@
 from datetime import datetime
+from email.policy import default
 from app.configs.database import db
 from sqlalchemy import Column, Integer, Date, String, Boolean
 from sqlalchemy.orm import relationship
@@ -22,7 +23,7 @@ class AllOrder(db.Model):
     date = Column(Date, default=current_date)
     client_name = Column(String, nullable=False)
     client_cpf = Column(String, nullable=False)
-    active_client = Column(Boolean, nullable=False)
+    active_client = Column(Boolean, default=True)
     order_id = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
 

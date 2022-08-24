@@ -5,7 +5,7 @@ from app.exceptions import ClientNotFound, CpfInvalid, DuplicateProduct, Invalid
 
 from sqlalchemy.orm.session import Session
 
-from app.models import Client, Product, ProductOrder, ClientOrder
+from app.models import Client, Product, ProductOrder, ClientOrder, SoldProduct, SoldOrder, Order, AllOrder
 
 
 
@@ -112,7 +112,6 @@ def packing_products(products: list):
 
     for each_product in products:
         product = session.query(Product).get(each_product['product_id'])
-        # print(f"{product.id=}")
         
         if not product:
             raise ProductNotFound
@@ -149,6 +148,7 @@ def check_available_amount(products: list):
         if product['available_amount'] < product['quantity']:
             raise UnavailableProduct
 
+
 def calculate_price(products: list):
     session: Session = db.session()
 
@@ -161,10 +161,7 @@ def calculate_price(products: list):
         current_product = session.query(Product).get(product['id'])
         # current_product = Product.query.get(product['id'])
 
-        # print(f"{current_product=}")
-
         remaining_products = current_product.available_amount - product['quantity']
-        # print(f"{remaining_products=}")
 
         setattr(current_product, "available_amount", remaining_products )
 
@@ -175,11 +172,29 @@ def calculate_price(products: list):
     return total_price
 
 
-def register_products_order(products: list, order_id: int):
+def register_all_order(client: Client, order: Order, price: int):
+    session: Session = db.session()
+    
+    all_order_data = {
+        "client_name": client.name,
+        "client_cpf": client.cpf,
+        "order_id": order.id,
+        "price": price
+    }
+
+    all_order = AllOrder(**all_order_data)
+    session.add(all_order)
+    
+    
+    session.commit()
+
+    return all_order
+
+
+def register_products_order(products: list, order_id: int, all_order_id: int):
     session: Session = db.session()
 
     for product in products:
-        print(f"{product=}")
 
         product_order_data = {
             "order_id": order_id,
@@ -188,11 +203,37 @@ def register_products_order(products: list, order_id: int):
         }
 
         product_order = ProductOrder(**product_order_data)
-        
         session.add(product_order)
+
+
+        sold_product_data = {
+            "name": product['name'],
+            "price": product['price'],
+            "category": product['category'],
+            "product_id": product['id']
+        }
+        
+        sold_product = SoldProduct(**sold_product_data)
+        session.add(sold_product)
+
         session.commit()
+        
+        sold_order(sold_product.id, all_order_id, product['quantity'])
 
 
+def sold_order(sold_product_id: int, all_order_id: int, product_amount: int):
+    session: Session = db.session()
+
+    sold_order_data = {
+        "sold_product_id": sold_product_id,
+        "all_order_id": all_order_id,
+        "product_amount":   product_amount
+    }
+
+    sold_order = SoldOrder(**sold_order_data)
+    session.add(sold_order)
+
+    session.commit()
 
 
 def register_client_order(client_id: int, order_id: int):
@@ -204,6 +245,8 @@ def register_client_order(client_id: int, order_id: int):
     }
 
     client_order = ClientOrder(**client_order_data)
-
     session.add(client_order)
+
+
     session.commit()
+

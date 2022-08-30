@@ -1,22 +1,24 @@
-from pydoc import cli
-from app.configs.database import db
-from app.exceptions import ClientNotFound, CpfInvalid, DuplicateProduct, InvalidValues, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys 
+from bcrypt import hashpw, gensalt, checkpw
+import jwt
 
+from app.configs.database import db
+from app.exceptions import AdmRequired, ClientNotFound, CpfInvalid, DuplicateProduct, InvalidCredentials, InvalidValues, MissingToken, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys 
+
+from flask import request
 
 from sqlalchemy.orm.session import Session
 
 from app.models import Client, Product, ProductOrder, ClientOrder, SoldProduct, SoldOrder, Order, AllOrder
 
 
-
 def check_keys(data: dict):
     data_keys = data.keys()
-    default_keys = ['name', 'email', 'cpf', 'birthday']
+    default_keys = ['name', 'email', 'cpf', 'birthday', 'password', 'isAdm']
 
     if set(data_keys) != set(default_keys):
         raise WrongKeys
 
-    if type(data['name']) != str or type(data['cpf']) != str or type(data['email']) != str or type(data['birthday']) != str:
+    if type(data['name']) != str or type(data['cpf']) != str or type(data['email']) != str or type(data['birthday']) != str or type(data['password']) != str or type(data['isAdm']) != bool:
         raise InvalidValues
 
     data['cpf'] = data['cpf'].replace(".", "")
@@ -26,6 +28,14 @@ def check_keys(data: dict):
         raise CpfInvalid
 
     data['name'] = data['name'].title()
+
+    senha = data['password'].encode('utf-8')
+    salt = gensalt()
+
+    data['password'] = hashpw(senha, salt).decode('utf-8')
+
+    if data['isAdm'] == True:
+        validate_adm(data)
 
     return data
 
@@ -249,4 +259,53 @@ def register_client_order(client_id: int, order_id: int):
 
 
     session.commit()
+
+
+def gen_token(data: dict):
+    session: Session = db.session()
+    
+    client: Client = session.query(Client).filter(Client.email == data['email']).first()
+
+    if not client:
+        raise InvalidCredentials
+
+    pwd = data['password'].encode('utf-8')
+    client_pwd = client.password.encode('utf-8')
+
+    pwd_match = checkpw(pwd, client_pwd)
+
+    if not pwd_match:
+        raise InvalidCredentials
+
+    client_serialize = {
+        "id": client.id,
+        "name": client.name,
+        "email": client.email,
+        "cpf": client.cpf,
+        "birthday": str(client.birthday),
+        "isAdm": client.isAdm
+    }
+
+    token = jwt.encode(client_serialize, 'lobo_secreto')
+
+    return token
+
+
+def validate_adm(data: dict):
+    headers = request.headers
+
+    for each_info in headers:
+        
+        if "Authorization" in each_info:
+            token = each_info[1].split(' ')[1]
+            
+    if not token:
+        raise MissingToken
+    
+    info = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
+
+    if info['isAdm'] == False:
+        raise AdmRequired 
+    
+
 

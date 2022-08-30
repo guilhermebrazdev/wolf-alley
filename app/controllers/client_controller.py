@@ -1,17 +1,21 @@
 from http import HTTPStatus
 from flask import request, jsonify
 from sqlalchemy.orm.session import Session
-from app.configs.database import db
-
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
-from app.exceptions import ClientNotFound, CpfInvalid, DuplicateProduct, InvalidValues, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys
+import jwt
+from bcrypt import hashpw, gensalt, checkpw
+from jwt.exceptions import InvalidSignatureError
 
+
+from app.exceptions import AdmRequired, ClientNotFound, CpfInvalid, DuplicateProduct, InvalidCredentials, InvalidValues, MissingToken, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys
+from app.configs.database import db
 from app.models import Client, Order
 from app.services import client_services
 
 
 def insert_client():
+    print('-'*100)
     data = request.get_json()
 
     try:
@@ -22,6 +26,8 @@ def insert_client():
         client = Client(**data)
 
         session.add(client)
+
+        print('-'*100)
         session.commit()
 
     except IntegrityError as i:
@@ -40,6 +46,16 @@ def insert_client():
     
     except CpfInvalid:
         return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST
+    
+    except InvalidSignatureError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
+
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+
 
     return jsonify(client), HTTPStatus.CREATED
 
@@ -181,3 +197,69 @@ def delete_client(client_cpf: str):
         return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST
 
     return "", HTTPStatus.NO_CONTENT
+
+
+def login():    
+    print('-'*100)
+
+    data = request.get_json()
+
+    try:
+        token = client_services.gen_token(data)
+
+    except InvalidCredentials:
+        return {"error": "Credenciais inválidas!"}, HTTPStatus.UNAUTHORIZED
+
+    return {"token": token}, HTTPStatus.OK
+
+
+# def login_teste():
+#     print("-"*100)
+#     data = request.get_json()
+
+#     print(f"{data=}")
+
+#     token = jwt.encode(data, 'lobo_secreto')
+#     print(f"{token=}")
+
+#     print("-"*100)
+#     return {"login": "loga ai man kk."}, HTTPStatus.OK
+
+
+# def get_token():
+#     print("-"*100)
+#     headers = request.headers
+
+#     for each_info in headers:
+        
+#         if "Authorization" in each_info:
+#             token = each_info[1].split(' ')[1]
+
+#     print(f"{token=}")
+
+#     info = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
+#     print(f"{info=}")
+
+#     print("-"*100)
+#     return {"token": "é o decodas ?"}
+
+
+# def make_hash():
+#     print("-"*100)
+#     data = request.get_json()
+
+#     senha = 'lobo'.encode('utf-8')
+#     salt = gensalt()
+#     pwd_hash = hashpw(senha, salt)
+
+#     print(f"{data=}")
+#     print(f"{salt=}")
+#     print(f"{senha=}")
+#     print(f"{pwd_hash=}")
+#     print(f"{type(pwd_hash)=}")
+
+#     match_pwd = checkpw(data['name'].encode('utf-8'), pwd_hash)
+#     print(f"{match_pwd=}")
+
+#     print("-"*100)
+#     return {"hash": "Hash secretão"}

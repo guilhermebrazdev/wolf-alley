@@ -7,14 +7,17 @@ from psycopg2.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
 
 from app.configs.database import db
-from app.exceptions import InvalidValues, ProductNotFound, WrongKeys
+from app.exceptions import AdmRequired, ClientNotFound, InvalidValues, MissingToken, ProductNotFound, WrongKeys
 from app.models import Product 
-from app.services import product_services
+from app.services import product_services, client_services
 
 def insert_product():
     data = request.get_json()
 
     try:
+        token = client_services.get_token()
+        client_services.validate_adm(token)
+
         data = product_services.check_keys(data)
         product_services.check_category(data)
 
@@ -40,7 +43,17 @@ def insert_product():
     except InvalidValues:
         return {"error": "Valores inválidos!"}, HTTPStatus.BAD_REQUEST
     
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
 
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado"}, HTTPStatus.NOT_FOUND
+
+    except UnicodeDecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
 
     return jsonify(product), HTTPStatus.CREATED
 
@@ -57,9 +70,10 @@ def update_product(product_id: int):
     payload = request.get_json()
 
     try:
-
         session: Session = db.session()
 
+        token = client_services.get_token()
+        client_services.validate_adm(token)
 
         product = product_services.verify_product(product_id)
 
@@ -87,6 +101,16 @@ def update_product(product_id: int):
 
     except WrongKeys:
         return {"error": "Chaves erradas!"}, HTTPStatus.BAD_REQUEST
+       
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado"}, HTTPStatus.NOT_FOUND
+
 
     return jsonify(product), HTTPStatus.OK 
 
@@ -95,6 +119,9 @@ def delete_product(product_id: int):
     try:
         session: Session = db.session()
 
+        token = client_services.get_token()
+        client_services.validate_adm(token)
+
         product = product_services.verify_product(product_id)
 
         session.delete(product)
@@ -102,6 +129,15 @@ def delete_product(product_id: int):
     
     except ProductNotFound:
         return {"error": "Produto não encontrado!"}, HTTPStatus.NOT_FOUND
+           
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado"}, HTTPStatus.NOT_FOUND
     
     return "", HTTPStatus.NO_CONTENT
 

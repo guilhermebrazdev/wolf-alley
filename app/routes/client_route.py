@@ -11,6 +11,3 @@ bp.patch("/<client_cpf>")(client_controller.update_client)
 bp.post("/login")(client_controller.login)
 bp.post("/checkout/<client_cpf>")(client_controller.checkout)
 bp.delete("/<client_cpf>")(client_controller.delete_client)
-
-# bp.post("/token")(client_controller.get_token)
-# bp.post("/hash")(client_controller.make_hash)

@@ -3,9 +3,7 @@ from flask import request, jsonify
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
-import jwt
-from bcrypt import hashpw, gensalt, checkpw
-from jwt.exceptions import InvalidSignatureError
+from jwt.exceptions import InvalidSignatureError, DecodeError
 
 
 from app.exceptions import AdmRequired, ClientNotFound, CpfInvalid, DuplicateProduct, InvalidCredentials, InvalidValues, MissingToken, ProductNotFound, UnavailableProduct, UndefinedQuantity, WrongKeys
@@ -15,19 +13,17 @@ from app.services import client_services
 
 
 def insert_client():
-    print('-'*100)
     data = request.get_json()
 
     try:
         data = client_services.check_keys(data) 
 
-        session: Session = db.session
+        session: Session = db.session()
 
         client = Client(**data)
 
         session.add(client)
 
-        print('-'*100)
         session.commit()
 
     except IntegrityError as i:
@@ -56,25 +52,59 @@ def insert_client():
     except AdmRequired:
         return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
 
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
+
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado"}, HTTPStatus.NOT_FOUND
 
     return jsonify(client), HTTPStatus.CREATED
 
 
 def retrieve_clients():
-    clients = Client.query.all()
+
+    try:
+        token = client_services.get_token()
+        client_services.validate_adm(token)
+
+        clients = Client.query.all()
+
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+        
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
+    
+    except ClientNotFound:
+        return {"error": "Cliente não encontrado"}, HTTPStatus.NOT_FOUND
 
     return {'clients': clients}, HTTPStatus.OK
 
 
 def get_client_by_cpf(client_cpf: str):
     try:
-        client = client_services.verify_client(client_cpf)
+        client: Client = client_services.verify_client(client_cpf)
+
+        token = client_services.get_token()
+        client_services.validate_user(client.id, token)
         
     except ClientNotFound:
         return {"error": "Cliente não encontrado!"}, HTTPStatus.NOT_FOUND
 
     except CpfInvalid:
         return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST
+
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+        
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
 
     return jsonify(client), HTTPStatus.OK
 
@@ -84,7 +114,11 @@ def update_client(client_cpf: str):
     payload = request.get_json()
     
     try:
-        client = client_services.verify_client(client_cpf)
+        client: Client = client_services.verify_client(client_cpf)
+
+        token = client_services.get_token()
+
+        client_services.validate_user(client.id, token)
 
         payload = client_services.update_data(payload)
 
@@ -114,6 +148,15 @@ def update_client(client_cpf: str):
     except ClientNotFound:
         return {"error": "Cliente não encontrado!"}, HTTPStatus.NOT_FOUND
 
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
+
     return jsonify(client),HTTPStatus.OK
 
 
@@ -123,7 +166,11 @@ def checkout(client_cpf: str):
     try:
         data = request.get_json()
 
-        client = client_services.verify_client(client_cpf)
+        client: Client = client_services.verify_client(client_cpf)
+
+        token = client_services.get_token()
+
+        client_services.validate_user(client.id, token)
 
         data = client_services.checkout_keys(data)
 
@@ -178,6 +225,15 @@ def checkout(client_cpf: str):
         return {
             "error": "Produto não disponível ou demanda excedente ao estoque"
         }, HTTPStatus.UNPROCESSABLE_ENTITY
+    
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
         
     return checkout_return, HTTPStatus.OK
 
@@ -185,7 +241,10 @@ def checkout(client_cpf: str):
 def delete_client(client_cpf: str):
     try:
         session: Session = db.session()
-        client = client_services.verify_client(client_cpf)
+        client: Client = client_services.verify_client(client_cpf)
+
+        token = client_services.get_token()
+        client_services.validate_user(client.id, token)
 
         session.delete(client)
         session.commit()
@@ -195,13 +254,20 @@ def delete_client(client_cpf: str):
     
     except CpfInvalid:
         return {"error": "Cpf inválido!"}, HTTPStatus.BAD_REQUEST
+       
+    except MissingToken:
+        return {"error": "Token não foi enviado!"}, HTTPStatus.BAD_REQUEST
+
+    except AdmRequired:
+        return {"error": "Necessita de permissão do administrador!"}, HTTPStatus.UNAUTHORIZED
+    
+    except DecodeError:
+        return {"error": "Formato de token inválido!"}, HTTPStatus.BAD_REQUEST
 
     return "", HTTPStatus.NO_CONTENT
 
 
 def login():    
-    print('-'*100)
-
     data = request.get_json()
 
     try:
@@ -211,55 +277,3 @@ def login():
         return {"error": "Credenciais inválidas!"}, HTTPStatus.UNAUTHORIZED
 
     return {"token": token}, HTTPStatus.OK
-
-
-# def login_teste():
-#     print("-"*100)
-#     data = request.get_json()
-
-#     print(f"{data=}")
-
-#     token = jwt.encode(data, 'lobo_secreto')
-#     print(f"{token=}")
-
-#     print("-"*100)
-#     return {"login": "loga ai man kk."}, HTTPStatus.OK
-
-
-# def get_token():
-#     print("-"*100)
-#     headers = request.headers
-
-#     for each_info in headers:
-        
-#         if "Authorization" in each_info:
-#             token = each_info[1].split(' ')[1]
-
-#     print(f"{token=}")
-
-#     info = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
-#     print(f"{info=}")
-
-#     print("-"*100)
-#     return {"token": "é o decodas ?"}
-
-
-# def make_hash():
-#     print("-"*100)
-#     data = request.get_json()
-
-#     senha = 'lobo'.encode('utf-8')
-#     salt = gensalt()
-#     pwd_hash = hashpw(senha, salt)
-
-#     print(f"{data=}")
-#     print(f"{salt=}")
-#     print(f"{senha=}")
-#     print(f"{pwd_hash=}")
-#     print(f"{type(pwd_hash)=}")
-
-#     match_pwd = checkpw(data['name'].encode('utf-8'), pwd_hash)
-#     print(f"{match_pwd=}")
-
-#     print("-"*100)
-#     return {"hash": "Hash secretão"}

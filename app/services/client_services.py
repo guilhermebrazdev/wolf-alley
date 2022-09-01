@@ -35,7 +35,8 @@ def check_keys(data: dict):
     data['password'] = hashpw(senha, salt).decode('utf-8')
 
     if data['isAdm'] == True:
-        validate_adm(data)
+        token = get_token()
+        validate_adm(token)
 
     return data
 
@@ -291,21 +292,36 @@ def gen_token(data: dict):
     return token
 
 
-def validate_adm(data: dict):
+def get_token():
     headers = request.headers
 
+    token = None
+
     for each_info in headers:
-        
         if "Authorization" in each_info:
             token = each_info[1].split(' ')[1]
             
-    if not token:
-        raise MissingToken
-    
-    info = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
+    if token and token != 'undefined':
+        return token
 
-    if info['isAdm'] == False:
+    raise MissingToken
+
+
+def validate_adm(token: str):    
+    client_data = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
+
+    client = verify_client(client_data['cpf'])
+
+    if client_data['isAdm'] == False:
         raise AdmRequired 
     
+
+def validate_user(client_id: int, token: str):
+    client_data = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
+
+    if client_data['isAdm'] != True:
+        if client_data['id'] != client_id:
+            raise AdmRequired
+
 
 

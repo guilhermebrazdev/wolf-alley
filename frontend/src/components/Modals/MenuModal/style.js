@@ -1,7 +1,55 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 150px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  display: flex;
   height: 150px;
-  background: green;
+  width: 150px;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  animation: showMenu 0.4s 0s both, hideMenu 0s 0.4s both;
+
+  border-bottom-left-radius: 8px;
+
+  > div {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  p {
+    height: 100%;
+    font-weight: 600;
+    font-size: 1.3em;
+  }
+
+  transition: 0.4s;
+
+  @keyframes showMenu {
+    from {
+      top: -71px;
+    }
+    to {
+      top: 80px;
+    }
+  }
+
+  @keyframes hideMenu {
+    from {
+      z-index: -1;
+    }
+    to {
+      z-index: 0;
+    }
+  }
+
+  /* top: 80px; */
+  /* :hover,
+  :focus {
+    top: 80px;
+  } */
 `;

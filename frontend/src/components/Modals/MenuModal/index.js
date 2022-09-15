@@ -1,16 +1,13 @@
-import { useContext } from "react";
-
-import { ModalContext } from "../../../context/MenuModal";
-
 import { Container } from "./style";
 
-const MenuModal = () => {
-  const { closingModal } = useContext(ModalContext);
-
+const MenuModal = ({ closingModal }) => {
   return (
-    <Container onClick={() => closingModal()}>
-      <p>Teste</p>
-      <p>Teste</p>
+    <Container>
+      <div>
+        <p onClick={() => closingModal()}>Home</p>
+        <p onClick={() => closingModal()}>Registre-se</p>
+        <p onClick={() => closingModal()}>Login</p>
+      </div>
     </Container>
   );
 };

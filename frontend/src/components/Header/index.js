@@ -1,24 +1,18 @@
-import { Container } from "./style";
+import { HiMenu } from "react-icons/hi";
 
 import logo from "../../assets/logo_wolf_alley.png";
-
 import MenuModal from "../Modals/MenuModal";
 
-import { ModalContext } from "../../context/MenuModal";
+import { Container } from "./style";
 
-import { HiMenu } from "react-icons/hi";
-import { useContext } from "react";
-
-const Header = () => {
-  const { openModal, openingModal, closingModal } = useContext(ModalContext);
-
+const Header = ({ openModal, openingModal, closingModal }) => {
   console.log("openModal ", openModal);
 
   return (
     <Container>
       <img src={logo} alt="logo" />
       <HiMenu onClick={() => openingModal()} />
-      {openModal && <MenuModal />}
+      {openModal && <MenuModal closingModal={closingModal} />}
     </Container>
   );
 };

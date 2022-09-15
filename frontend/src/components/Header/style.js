@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.header`
-  display: block;
   width: 100vw;
   background: var(--darkBlue);
-  /* max-height: 80px; */
   height: 80px;
+  min-height: 80px;
   display: flex;
   justify-content: space-around;
   align-items: center;

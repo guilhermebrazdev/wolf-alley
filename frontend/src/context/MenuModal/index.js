@@ -1,9 +1,11 @@
 import { createContext, useContext, useState } from "react";
+import { useHistory } from "react-router";
 
 export const ModalContext = createContext();
 
 export const MenuModalProvider = ({ children }) => {
   const [openModal, setOpenModal] = useState(false);
+  const history = useHistory();
 
   function openingModal() {
     setOpenModal(true);
@@ -13,8 +15,32 @@ export const MenuModalProvider = ({ children }) => {
     setOpenModal(false);
   }
 
+  function goToHome() {
+    history.push("/");
+    closingModal();
+  }
+
+  function goToLogin() {
+    history.push("/login");
+    closingModal();
+  }
+
+  function goToSignUp() {
+    history.push("/signUp");
+    closingModal();
+  }
+
   return (
-    <ModalContext.Provider value={{ openModal, openingModal, closingModal }}>
+    <ModalContext.Provider
+      value={{
+        openModal,
+        openingModal,
+        closingModal,
+        goToHome,
+        goToLogin,
+        goToSignUp,
+      }}
+    >
       {children}
     </ModalContext.Provider>
   );

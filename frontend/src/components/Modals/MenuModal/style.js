@@ -5,12 +5,13 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   right: 0;
+  top: 80px;
   display: flex;
   height: 150px;
   width: 150px;
   background: rgba(0, 0, 0, 0.8);
   justify-content: center;
-  animation: showMenu 0.4s 0s both, hideMenu 0s 0.4s both;
+  /* animation: showMenu 0.4s 0s both, hideMenu 0s 0.4s both; */
 
   border-bottom-left-radius: 8px;
 
@@ -27,9 +28,9 @@ export const Container = styled.div`
     font-size: 1.3em;
   }
 
-  transition: 0.4s;
+  /* transition: 0.4s; */
 
-  @keyframes showMenu {
+  /* @keyframes showMenu {
     from {
       top: -71px;
     }
@@ -45,7 +46,7 @@ export const Container = styled.div`
     to {
       z-index: 0;
     }
-  }
+  } */
 
   /* top: 80px; */
   /* :hover,

@@ -1,9 +1,15 @@
 import { Container } from "./style";
+import { AiOutlineUser } from "react-icons/ai";
+import { BsFillLockFill } from "react-icons/bs";
+
+import Input from "../../Input";
 
 const LoginForm = () => {
   return (
     <Container>
-      <h1>form</h1>
+      <Input placeholder="Email">{<AiOutlineUser />}</Input>
+      <Input placeholder="Senha">{<BsFillLockFill />}</Input>
+      <button>Entrar</button>
     </Container>
   );
 };

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  background: pink;
+  /* background: pink; */
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 `;

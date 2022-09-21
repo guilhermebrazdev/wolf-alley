@@ -7,4 +7,13 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
+  h1 {
+    color: gold;
+    font-family: var(--pressStart);
+  }
+
+  img {
+    height: 250px;
+  }
 `;

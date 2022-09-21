@@ -25,7 +25,12 @@ export const Container = styled.div`
   p {
     height: 100%;
     font-weight: 600;
-    font-size: 1.3em;
+    font-size: 1.3rem;
+    :hover {
+      cursor: pointer;
+      color: gold;
+      font-size: 1.4rem;
+    }
   }
 
   /* transition: 0.4s; */

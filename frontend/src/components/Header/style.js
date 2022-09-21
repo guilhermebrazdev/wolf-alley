@@ -19,5 +19,6 @@ export const Container = styled.header`
   svg {
     width: 90px;
     height: 30px;
+    cursor: pointer;
   }
 `;

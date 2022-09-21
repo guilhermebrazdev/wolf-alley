@@ -49,6 +49,7 @@ table {
 }
 
 :root{
-    --darkBlue: #102D4D
+    --darkBlue: #102D4D;
+    --lightBlue: #7C9EC2
 }
 `;

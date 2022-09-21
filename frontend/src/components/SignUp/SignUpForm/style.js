@@ -1,14 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  height: 100%;
+  background: var(--darkBlue);
+  width: 300px;
+  height: 500px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-evenly;
-
-  h1 {
-    color: gold;
-    font-family: var(--pressStart);
-  }
+  align-items: center;
+  border-radius: 8px;
 `;

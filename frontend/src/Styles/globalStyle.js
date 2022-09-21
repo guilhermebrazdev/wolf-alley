@@ -49,7 +49,13 @@ table {
 }
 
 :root{
+    /* ------------------Colors-------------------------- */
     --darkBlue: #102D4D;
-    --lightBlue: #7C9EC2
+    --lightBlue: #7C9EC2;
+
+    /* ------------------Fontes-------------------------- */
+    --pressStart: 'Press Start 2P', cursive;
+    --lobsterTwo: 'Lobster Two', cursive;
+    
 }
 `;

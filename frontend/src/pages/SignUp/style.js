@@ -10,5 +10,6 @@ export const Container = styled.div`
   h1 {
     color: gold;
     font-family: var(--pressStart);
+    font-size: 1.3rem;
   }
 `;

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  /* background: pink; */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -11,9 +10,10 @@ export const Container = styled.div`
   h1 {
     color: gold;
     font-family: var(--pressStart);
+    font-size: 2rem;
   }
 
   img {
-    height: 250px;
+    height: 200px;
   }
 `;

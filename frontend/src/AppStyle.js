@@ -8,9 +8,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  /* header {
-    background: transparent;
-  } */
+  header {
+    position: fixed;
+    background: green;
+  }
 `;
 
 export const RouteBox = styled.div`

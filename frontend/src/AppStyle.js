@@ -2,21 +2,24 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   text-align: center;
-  /* min-height: 100vh; */
-  /* height: 100vh; */
   color: white;
   display: flex;
   flex-direction: column;
 
-  /* header {
-    background: transparent;
-  } */
+  header {
+    position: fixed;
+  }
 `;
 
 export const RouteBox = styled.div`
-  /* max-height: 100vh; */
-  /* min-height: 100%; */
+  height: calc(100vh - 80px);
+  padding-top: 80px;
+`;
+
+export const BackBox = styled.div`
   min-height: 100vh;
-  /* margin-top: 100px; */
-  background: purple;
+  min-width: 100vw;
+  background: linear-gradient(to bottom, #09498c 30%, #4e5980);
+  position: fixed;
+  z-index: -1;
 `;

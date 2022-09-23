@@ -8,6 +8,7 @@ export const Container = styled.header`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  /* position: fixed; */
 
   img {
     width: 200px;

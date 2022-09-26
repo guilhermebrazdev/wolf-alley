@@ -30,7 +30,7 @@ body {
     line-height: 1;
     box-sizing: border-box;
     font-family: 'M PLUS Rounded 1c', sans-serif;
-    background: linear-gradient(to bottom,  #09498C 30%, #4E5980 );
+    
 }
 ol, ul {
     list-style: none;

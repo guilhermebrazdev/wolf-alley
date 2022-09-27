@@ -1,9 +1,9 @@
 import { Container } from "./style";
 
-const Button = ({ children }) => {
+const Button = ({ children, type }) => {
   return (
     <Container>
-      <button>{children}</button>
+      <button type={type}>{children}</button>
     </Container>
   );
 };

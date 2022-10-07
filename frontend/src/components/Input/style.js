@@ -1,24 +1,38 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 250px;
-  height: 30px;
-  background: white;
+  height: 45px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  border-radius: 8px;
+  flex-direction: column;
+  align-items: flex-start;
 
-  svg {
-    color: var(--lightBlue);
+  > section {
+    width: 250px;
+    height: 30px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 8px;
+
+    svg {
+      color: var(--lightBlue);
+    }
+
+    input {
+      width: 95%;
+      height: 50%;
+      background: transparent;
+      outline: none;
+      border: none;
+    }
   }
 
-  input {
-    width: 90%;
-    height: 90%;
-    background: transparent;
-    outline: none;
-    border: none;
+  p {
+    color: var(--pinkError);
+    font-weight: 900;
+    font-size: 0.8rem;
+    margin-left: 8px;
   }
 `;

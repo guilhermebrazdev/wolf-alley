@@ -1,5 +1,10 @@
 import { MenuModalProvider } from "./MenuModal";
+import { LoginProvider } from "./LoginPage";
 
 export const Providers = ({ children }) => {
-  return <MenuModalProvider>{children}</MenuModalProvider>;
+  return (
+    <MenuModalProvider>
+      <LoginProvider>{children}</LoginProvider>
+    </MenuModalProvider>
+  );
 };

@@ -5,9 +5,11 @@ import { Container } from "./style";
 const Input = ({ children, error, register, name, ...rest }, ref) => {
   return (
     <Container>
-      {children}
-      <input {...rest} {...register(name)} />
-      {error && <p>Necessário</p>}
+      <section>
+        {children}
+        <input {...rest} {...register(name)} />
+      </section>
+      {error && <p>{error}</p>}
     </Container>
   );
 };

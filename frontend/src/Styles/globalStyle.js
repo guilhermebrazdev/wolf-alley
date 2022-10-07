@@ -52,6 +52,7 @@ table {
     /* ------------------Colors-------------------------- */
     --darkBlue: #102D4D;
     --lightBlue: #7C9EC2;
+    --pinkError: #f12b5a;
 
     /* ------------------Fontes-------------------------- */
     --pressStart: 'Press Start 2P', cursive;

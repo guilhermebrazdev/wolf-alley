@@ -11,8 +11,8 @@ export const Container = styled.div`
     align-items: center;
     border-radius: 8px;
 
-    @media (min-width: 1024px) {
+    /* @media (min-width: 1024px) {
       height: 250px;
-    }
+    } */
   }
 `;

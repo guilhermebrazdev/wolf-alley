@@ -4,7 +4,7 @@ import { ModalContext } from "../../../context/MenuModal";
 
 import { Container } from "./style";
 
-const MenuModal = () => {
+const MobileMenuModal = () => {
   const { goToHome, goToSignUp, goToLogin } = useContext(ModalContext);
 
   return (
@@ -18,4 +18,4 @@ const MenuModal = () => {
   );
 };
 
-export default MenuModal;
+export default MobileMenuModal;

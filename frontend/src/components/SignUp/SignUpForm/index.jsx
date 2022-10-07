@@ -9,6 +9,7 @@ import { Container } from "./style";
 
 const SignUpForm = () => {
   return (
+    // ESSA PAGE DA ERRO PQ AINDA NÃO PASSEI O REGISTER PARA O INPUT
     <Container>
       <Input placeholder="Nome">{<AiOutlineUser />}</Input>
       <Input placeholder="Email">{<AiOutlineMail />}</Input>

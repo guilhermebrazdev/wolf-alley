@@ -33,7 +33,7 @@ export const Container = styled.div`
     }
   }
 
-  /* transition: 0.4s; */
+  transition: 0.4s;
 
   /* @keyframes showMenu {
     from {

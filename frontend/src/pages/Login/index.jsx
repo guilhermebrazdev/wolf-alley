@@ -6,8 +6,10 @@ const Login = () => {
   return (
     <Container>
       <h1>Entre!</h1>
-      <LoginForm />
-      <img src={game_machine} alt="game_machine_svg" />
+      <div>
+        <LoginForm />
+        <img src={game_machine} alt="game_machine_svg" />
+      </div>
     </Container>
   );
 };

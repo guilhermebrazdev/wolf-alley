@@ -8,7 +8,7 @@ export const MenuModalProvider = ({ children }) => {
   const history = useHistory();
 
   function openingModal() {
-    setOpenModal(true);
+    setOpenModal(!openModal);
   }
 
   function closingModal() {

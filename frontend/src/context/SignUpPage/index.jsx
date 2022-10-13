@@ -2,29 +2,32 @@ import { createContext, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { LoginSchema } from "../../schemas";
 import api from "../../services/api";
+import { SignUpSchema } from "../../schemas";
 
-const LoginContext = createContext();
+const SignUpContext = createContext();
 
-export const LoginProvider = ({ children }) => {
+export const SignUpProvider = ({ children }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(SignUpSchema),
   });
 
-  async function login(data) {
+  async function signUp(data) {
+    console.log("Inserindo cliente");
+
+    data.isAdm = false;
+
     console.log("data ", data);
-    console.log("enviando");
 
     await api
-      .post("/clients/login", data)
+      .post("/clients", data)
       .then((response) => {
+        console.log("deu certoooo");
         console.log(response);
-        console.log("DEU CERTO???");
       })
       .catch((err) => {
         console.log(err);
@@ -33,10 +36,10 @@ export const LoginProvider = ({ children }) => {
   }
 
   return (
-    <LoginContext.Provider value={{ register, handleSubmit, errors, login }}>
+    <SignUpContext.Provider value={{ register, handleSubmit, errors, signUp }}>
       {children}
-    </LoginContext.Provider>
+    </SignUpContext.Provider>
   );
 };
 
-export const LoginCtxt = () => useContext(LoginContext);
+export const SignUpCtxt = () => useContext(SignUpContext);

@@ -1,13 +1,11 @@
-import { useContext } from "react";
-
 import Routes from "./routes/index.jsx";
 import Header from "./components/Header";
-import { ModalContext } from "./context/MenuModal";
+import { MenuModalCtxt } from "./context/MenuModal";
 
 import { Container, RouteBox, BackBox } from "./AppStyle";
 
 function App() {
-  const { closingModal } = useContext(ModalContext);
+  const { closingModal } = MenuModalCtxt();
 
   return (
     <Container onClick={() => closingModal()}>

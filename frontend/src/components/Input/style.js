@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  height: 45px;
+  height: 64px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  > label {
+    margin-bottom: 4px;
+  }
 
   > section {
     width: 250px;

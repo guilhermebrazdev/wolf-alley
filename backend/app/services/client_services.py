@@ -13,10 +13,12 @@ from app.models import Client, Product, ProductOrder, ClientOrder, SoldProduct, 
 
 def check_keys(data: dict):
     data_keys = data.keys()
-    default_keys = ['name', 'email', 'cpf', 'birthday', 'password', 'isAdm']
+    default_keys = ['name', 'email', 'cpf', 'birthday', 'password', 'confirmPassword', 'isAdm']
 
     if set(data_keys) != set(default_keys):
         raise WrongKeys
+    
+    print(f'{type(data["birthday"])=}')
 
     if type(data['name']) != str or type(data['cpf']) != str or type(data['email']) != str or type(data['birthday']) != str or type(data['password']) != str or type(data['isAdm']) != bool:
         raise InvalidValues
@@ -37,6 +39,8 @@ def check_keys(data: dict):
     if data['isAdm'] == True:
         token = get_token()
         validate_adm(token)
+    
+    data.pop('confirmPassword')
 
     return data
 

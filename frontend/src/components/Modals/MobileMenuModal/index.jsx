@@ -1,11 +1,9 @@
-import { useContext } from "react";
-
-import { ModalContext } from "../../../context/MenuModal";
+import { MenuModalCtxt } from "../../../context/MenuModal";
 
 import { Container } from "./style";
 
 const MobileMenuModal = () => {
-  const { goToHome, goToSignUp, goToLogin } = useContext(ModalContext);
+  const { goToHome, goToSignUp, goToLogin } = MenuModalCtxt();
 
   return (
     <Container>

@@ -2,22 +2,78 @@ import { AiOutlineUser, AiOutlineMail } from "react-icons/ai";
 import { BsFillLockFill, BsFillCreditCardFill } from "react-icons/bs";
 
 import Button from "../../Button";
+import { SignUpCtxt } from "../../../context/SignUpPage";
 
 import Input from "../../Input";
 
 import { Container } from "./style";
 
 const SignUpForm = () => {
+  const { register, errors, handleSubmit, signUp } = SignUpCtxt();
   return (
-    // ESSA PAGE DA ERRO PQ AINDA NÃO PASSEI O REGISTER PARA O INPUT
     <Container>
-      <Input placeholder="Nome">{<AiOutlineUser />}</Input>
-      <Input placeholder="Email">{<AiOutlineMail />}</Input>
-      <Input placeholder="CPF">{<BsFillCreditCardFill />}</Input>
-      <Input placeholder="Senha">{<BsFillLockFill />}</Input>
-      <Input placeholder="Confirmar senha">{<BsFillLockFill />}</Input>
-      <Input type="date"></Input>
-      <Button>Cadastre-se!</Button>
+      <form onSubmit={handleSubmit(signUp)}>
+        <Input
+          placeholder="Nome"
+          name="name"
+          type="text"
+          register={register}
+          errors={errors.name?.message}
+        >
+          {<AiOutlineUser />}
+        </Input>
+        <Input
+          placeholder="Email"
+          name="email"
+          type="email"
+          register={register}
+          errors={errors.email?.message}
+        >
+          {<AiOutlineMail />}
+        </Input>
+        <Input
+          placeholder="CPF"
+          name="cpf"
+          type="text"
+          register={register}
+          errors={errors.cpf?.message}
+        >
+          {<BsFillCreditCardFill />}
+        </Input>
+        <Input
+          placeholder="Senha"
+          name="password"
+          type="password"
+          register={register}
+          errors={errors.password?.message}
+        >
+          {<BsFillLockFill />}
+        </Input>
+        <Input
+          placeholder="Confirmar senha"
+          name="confirmPassword"
+          type="password"
+          register={register}
+          errors={errors.confirmPassword?.message}
+        >
+          {<BsFillLockFill />}
+        </Input>
+        {/* <Input
+          placeholder="Administrador"
+          name="isAdm"
+          type="checkbox"
+          register={register}
+          errors={errors.isAdm?.message}
+        ></Input> */}
+        <Input
+          placeholder="Data de nascimento"
+          name="birthday"
+          type="date"
+          register={register}
+          errors={errors.date?.message}
+        ></Input>
+        <Button type="submit">Cadastre-se!</Button>
+      </form>
     </Container>
   );
 };

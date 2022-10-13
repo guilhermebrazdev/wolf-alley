@@ -46,4 +46,4 @@ export const MenuModalProvider = ({ children }) => {
   );
 };
 
-// export const MenuModal = () => useContext(ModalContext);
+export const MenuModalCtxt = () => useContext(ModalContext);

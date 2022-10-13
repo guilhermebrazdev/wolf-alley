@@ -11,5 +11,29 @@ export const Container = styled.div`
     color: gold;
     font-family: var(--pressStart);
     font-size: 1.3rem;
+
+    @media (min-width: 1024px) {
+      font-size: 1.5rem;
+    }
+    @media (min-width: 1440px) {
+      font-size: 2rem;
+    }
+  }
+
+  > div {
+    /* background: green; */
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    > img {
+      height: 400px;
+      display: none;
+
+      @media (min-width: 1024px) {
+        display: block;
+      }
+    }
   }
 `;

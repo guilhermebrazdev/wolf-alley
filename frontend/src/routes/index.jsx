@@ -2,17 +2,15 @@ import { Switch } from "react-router-dom";
 
 import { Login, Dashboard, SignUp, Home } from "../pages";
 
-import Route from "./route";
+import Rota from "./route";
 
 const Routes = () => {
-  //   const token = localStorage.getItem("@WolfAlley:Token");
-
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/signUp" component={SignUp} />
+      <Rota exact path="/" Component={Home} />
+      <Rota path="/login" Component={Login} />
+      <Rota path="/signUp" Component={SignUp} />
+      <Rota path="/dashboard" Component={Dashboard} isPrivate />
     </Switch>
   );
 };

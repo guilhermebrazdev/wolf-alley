@@ -1,16 +1,36 @@
-import { MenuModalCtxt } from "../../../context/MenuModal";
+import { NavLink } from "react-router-dom";
 
 import { Container } from "./style";
 
-const MobileMenuModal = () => {
-  const { goToHome, goToSignUp, goToLogin } = MenuModalCtxt();
-
+const MobileMenuModal = ({ navigateOptions }) => {
   return (
     <Container>
       <div>
-        <p onClick={() => goToHome()}>Home</p>
-        <p onClick={() => goToLogin()}>Login</p>
-        <p onClick={() => goToSignUp()}>Sign Up</p>
+        <NavLink
+          exact
+          to={navigateOptions.firstOpt.path}
+          activeStyle={{
+            color: "gold",
+          }}
+        >
+          {navigateOptions.firstOpt.value}
+        </NavLink>
+        <NavLink
+          to={navigateOptions.secOpt.path}
+          activeStyle={{
+            color: "gold",
+          }}
+        >
+          {navigateOptions.secOpt.value}
+        </NavLink>
+        <NavLink
+          to={navigateOptions.thirdOpt.path}
+          activeStyle={{
+            color: "gold",
+          }}
+        >
+          {navigateOptions.thirdOpt.value}
+        </NavLink>
       </div>
     </Container>
   );

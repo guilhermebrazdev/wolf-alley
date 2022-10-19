@@ -1,19 +1,25 @@
-import { Redirect, Route as ReactDOMRoute } from "react-router-dom";
+import { useEffect } from "react";
+import { Redirect, Route } from "react-router-dom";
+import { LoginCtxt } from "../context/LoginPage";
 
-const Route = ({ isPrivate = false, Component, ...rest }) => {
-  const authToken = localStorage.getItem("@WolfAlley:Token");
+const Rota = ({ isPrivate = false, Component }) => {
+  const { authenticating } = LoginCtxt();
+
+  useEffect(() => {
+    authenticating();
+  }, [Component]);
+
+  const token = localStorage.getItem("@WolfAlley:Token");
+
   return (
-    <ReactDOMRoute
-      {...rest}
-      render={() =>
-        isPrivate === !!authToken ? (
-          <Component></Component>
-        ) : (
-          <Redirect to={isPrivate ? "/" : "/dashboard"} />
-        )
-      }
-    />
+    <Route>
+      {isPrivate === !!token ? (
+        <Component />
+      ) : (
+        <Redirect to={token ? "/dashboard" : "/"} />
+      )}
+    </Route>
   );
 };
 
-export default Route;
+export default Rota;

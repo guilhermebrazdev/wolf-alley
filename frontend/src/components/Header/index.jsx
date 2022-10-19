@@ -1,21 +1,22 @@
-import { useContext } from "react";
 import { HiMenu } from "react-icons/hi";
-
 import logo from "../../assets/logo_wolf_alley.png";
-import { ModalContext } from "../../context/MenuModal";
+import { LoginCtxt } from "../../context/LoginPage";
+import { MenuModalCtxt } from "../../context/MenuModal";
+import DesktopMenu from "../Menu/DesktopMenu";
 import MobileMenuModal from "../Modals/MobileMenuModal";
 
 import { Container } from "./style";
 
 const Header = () => {
-  const { openModal, openingModal, goToHome, goToLogin, goToSignUp } =
-    useContext(ModalContext);
+  const { authenticated, authPath, nonAuthPath } = LoginCtxt();
+  const { openModal, openingModal } = MenuModalCtxt();
+
+  let navigateOptions = authenticated ? authPath : nonAuthPath;
 
   return (
     <Container>
       <div>
         <img src={logo} alt="logo" />
-
         <section id="mobileMenu">
           <HiMenu
             onClick={(e) => {
@@ -23,12 +24,10 @@ const Header = () => {
               e.stopPropagation();
             }}
           />
-          {openModal && <MobileMenuModal />}
+          {openModal && <MobileMenuModal navigateOptions={navigateOptions} />}
         </section>
-        <section id="desktopMenu">
-          <p onClick={() => goToHome()}>Home</p>
-          <p onClick={() => goToLogin()}>Login</p>
-          <p onClick={() => goToSignUp()}>Sign Up</p>
+        <section>
+          <DesktopMenu navigateOptions={navigateOptions} />
         </section>
       </div>
     </Container>

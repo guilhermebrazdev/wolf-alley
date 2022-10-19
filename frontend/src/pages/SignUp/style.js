@@ -21,7 +21,6 @@ export const Container = styled.div`
   }
 
   > div {
-    /* background: green; */
     width: 100%;
     display: flex;
     justify-content: space-evenly;

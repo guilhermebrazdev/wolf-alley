@@ -22,7 +22,10 @@ export const Container = styled.div`
     justify-content: center;
   }
 
-  p {
+  a {
+    color: white;
+    text-decoration: none;
+
     height: 100%;
     font-weight: 600;
     font-size: 1.3rem;

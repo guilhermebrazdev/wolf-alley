@@ -1,9 +1,11 @@
 import { Container } from "./style";
 
-const Button = ({ children, type }) => {
+const Button = ({ children, type, onClick, id }) => {
   return (
-    <Container>
-      <button type={type}>{children}</button>
+    <Container id={id}>
+      <button onClick={onClick} type={type}>
+        {children}
+      </button>
     </Container>
   );
 };

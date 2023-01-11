@@ -1,13 +1,16 @@
 import { MenuModalProvider } from "./MenuModal";
-import { LoginProvider } from "./LoginPage";
-import { SignUpProvider } from "./SignUpPage";
+import { ClientProvider } from "./Client";
+import { ProductProvider } from "./Product";
+import { CartProvider } from "./Cart";
 
 export const Providers = ({ children }) => {
   return (
     <MenuModalProvider>
-      <SignUpProvider>
-        <LoginProvider>{children}</LoginProvider>
-      </SignUpProvider>
+      <ClientProvider>
+        <ProductProvider>
+          <CartProvider>{children}</CartProvider>
+        </ProductProvider>
+      </ClientProvider>
     </MenuModalProvider>
   );
 };

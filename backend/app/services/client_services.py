@@ -18,7 +18,6 @@ def check_keys(data: dict):
     if set(data_keys) != set(default_keys):
         raise WrongKeys
     
-    print(f'{type(data["birthday"])=}')
 
     if type(data['name']) != str or type(data['cpf']) != str or type(data['email']) != str or type(data['birthday']) != str or type(data['password']) != str or type(data['isAdm']) != bool:
         raise InvalidValues
@@ -314,7 +313,7 @@ def get_token():
 def validate_adm(token: str):    
     client_data = jwt.decode(token, 'lobo_secreto', algorithms='HS256')
 
-    client = verify_client(client_data['cpf'])
+    verify_client(client_data['cpf'])
 
     if client_data['isAdm'] == False:
         raise AdmRequired 

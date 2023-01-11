@@ -4,14 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 
-import { LoginSchema } from "../../schemas";
 import api from "../../services/api";
+import { LoginSchema, SignUpSchema } from "../../schemas";
 
-const LoginContext = createContext();
+const ClientContext = createContext();
 
-export const LoginProvider = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState(false);
-
+export const ClientProvider = ({ children }) => {
   const history = useHistory();
 
   const {
@@ -19,13 +17,29 @@ export const LoginProvider = ({ children }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    resolver: yupResolver(SignUpSchema),
     resolver: yupResolver(LoginSchema),
   });
 
-  async function login(data) {
-    console.log("data ", data);
-    console.log("enviando");
+  async function signUp(data) {
+    data.isAdm = false;
 
+    await api
+      .post("/clients", data)
+      .then((response) => {
+        console.log(response);
+        toast.success("Usuário registrado com sucesso!");
+
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("O usuário não foi registrado!");
+        console.log(`Erro: ${err.response.data.error}`);
+      });
+  }
+
+  async function login(data) {
     await api
       .post("/clients/login", data)
       .then((response) => {
@@ -35,12 +49,11 @@ export const LoginProvider = ({ children }) => {
         history.push("/dashboard");
       })
       .catch((err) => {
-        console.log(err);
-
         toast.error("Algo deu errado no Login!");
         console.log(`Erro: ${err.response.data.error}`);
       });
   }
+  const [authenticated, setAuthenticated] = useState(false);
 
   function authenticating() {
     const token = localStorage.getItem("@WolfAlley:Token");
@@ -61,11 +74,12 @@ export const LoginProvider = ({ children }) => {
   };
 
   return (
-    <LoginContext.Provider
+    <ClientContext.Provider
       value={{
         register,
         handleSubmit,
         errors,
+        signUp,
         login,
         authenticating,
         authenticated,
@@ -74,8 +88,8 @@ export const LoginProvider = ({ children }) => {
       }}
     >
       {children}
-    </LoginContext.Provider>
+    </ClientContext.Provider>
   );
 };
 
-export const LoginCtxt = () => useContext(LoginContext);
+export const ClientCtxt = () => useContext(ClientContext);

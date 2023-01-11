@@ -53,6 +53,10 @@ table {
     --darkBlue: #102D4D;
     --lightBlue: #7C9EC2;
     --pinkError: #f12b5a;
+    --lightGreen: #003369;
+    --waterGreen: #074952;
+    --beige: #D7CF88;
+    --trash: #bb8888;
 
     /* ------------------Fontes-------------------------- */
     --pressStart: 'Press Start 2P', cursive;

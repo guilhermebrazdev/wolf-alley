@@ -1,6 +1,7 @@
 import { HiMenu } from "react-icons/hi";
+
 import logo from "../../assets/logo_wolf_alley.png";
-import { LoginCtxt } from "../../context/LoginPage";
+import { ClientCtxt } from "../../context/Client";
 import { MenuModalCtxt } from "../../context/MenuModal";
 import DesktopMenu from "../Menu/DesktopMenu";
 import MobileMenuModal from "../Modals/MobileMenuModal";
@@ -8,7 +9,7 @@ import MobileMenuModal from "../Modals/MobileMenuModal";
 import { Container } from "./style";
 
 const Header = () => {
-  const { authenticated, authPath, nonAuthPath } = LoginCtxt();
+  const { authenticated, authPath, nonAuthPath } = ClientCtxt();
   const { openModal, openingModal } = MenuModalCtxt();
 
   let navigateOptions = authenticated ? authPath : nonAuthPath;

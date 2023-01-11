@@ -3,12 +3,12 @@ import { BsFillLockFill } from "react-icons/bs";
 
 import Input from "../../Input";
 import Button from "../../Button";
-import { LoginCtxt } from "../../../context/LoginPage";
+import { ClientCtxt } from "../../../context/Client";
 
 import { Container } from "./style";
 
 const LoginForm = () => {
-  const { register, handleSubmit, errors, login } = LoginCtxt();
+  const { register, handleSubmit, errors, login } = ClientCtxt();
 
   return (
     <Container>

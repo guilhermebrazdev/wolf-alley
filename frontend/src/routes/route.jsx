@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { LoginCtxt } from "../context/LoginPage";
+import { ClientCtxt } from "../context/Client";
 
 const Rota = ({ isPrivate = false, Component }) => {
-  const { authenticating } = LoginCtxt();
+  const { authenticating } = ClientCtxt();
 
   useEffect(() => {
     authenticating();

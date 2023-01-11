@@ -8,8 +8,8 @@ export const Container = styled.div`
     border-radius: 8px;
     :hover {
       transform: scale(1.06);
-      cursor: pointer;
     }
+    cursor: pointer;
     transition: 0.2s;
   }
 `;

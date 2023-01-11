@@ -12,7 +12,7 @@ def check_keys(data: dict):
     if set(default_keys) != set(data_keys):
         raise WrongKeys
     
-    if type(data['name']) != str or type(data['price']) != int or type(data['available_amount']) != int or type(data['category']) != str or data['available_amount'] < 0 or data['price'] < 0:
+    if type(data['name']) != str or type(data['price']) != float or type(data['available_amount']) != int or type(data['category']) != str or data['available_amount'] < 0 or data['price'] < 0:
         raise InvalidValues
     
 

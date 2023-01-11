@@ -2,14 +2,14 @@ import { AiOutlineUser, AiOutlineMail } from "react-icons/ai";
 import { BsFillLockFill, BsFillCreditCardFill } from "react-icons/bs";
 
 import Button from "../../Button";
-import { SignUpCtxt } from "../../../context/SignUpPage";
+import { ClientCtxt } from "../../../context/Client";
 
 import Input from "../../Input";
 
 import { Container } from "./style";
 
 const SignUpForm = () => {
-  const { register, errors, handleSubmit, signUp } = SignUpCtxt();
+  const { register, errors, handleSubmit, signUp } = ClientCtxt();
   return (
     <Container>
       <form onSubmit={handleSubmit(signUp)}>

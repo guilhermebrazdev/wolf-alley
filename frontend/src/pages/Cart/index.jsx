@@ -3,7 +3,9 @@ import { CartCtxt } from "../../context/Cart";
 import { ProductCtxt } from "../../context/Product";
 import Button from "../../components/Button";
 
-import { Container } from "./style";
+import { Container, CartBox, EmptyCart } from "./style";
+
+import { BsCartX } from "react-icons/bs";
 
 const Cart = () => {
   const { formatarReal } = ProductCtxt();
@@ -17,15 +19,24 @@ const Cart = () => {
 
   return (
     <Container>
-      <div>
-        {cart.map((product) => (
-          <ProductInCart product={product} key={product.id} />
-        ))}
-        <section>
-          <h1>{formatarReal(totalPrice)}</h1>
-          <Button id={"buyButton"}>Comprar !</Button>
-        </section>
-      </div>
+      {cart.length > 0 ? (
+        <CartBox>
+          {cart.map((product) => (
+            <ProductInCart product={product} key={product.id} />
+          ))}
+          <section>
+            <h1>{formatarReal(totalPrice)}</h1>
+            <Button id={"buyButton"}>Comprar !</Button>
+          </section>
+        </CartBox>
+      ) : (
+        <EmptyCart>
+          <div>
+            <BsCartX />
+            <h1>Carrinho vazio!</h1>
+          </div>
+        </EmptyCart>
+      )}
     </Container>
   );
 };

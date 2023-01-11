@@ -25,12 +25,26 @@ export const CartProvider = ({ children }) => {
     }
   }
 
-  function showCart() {
-    console.log(cart);
+  function removeFromCart(product) {
+    if (product.quantity > 1) {
+      const newProduct = { ...product, quantity: product.quantity - 1 };
+
+      const newCart = cart.map((element) =>
+        element === product ? newProduct : element
+      );
+
+      setCart(newCart);
+
+      localStorage.setItem("@WolfAlley:Cart", JSON.stringify(newCart));
+    } else {
+      const newCart = cart.filter((element) => element !== product);
+      setCart(newCart);
+      localStorage.setItem("@WolfAlley:Cart", JSON.stringify(newCart));
+    }
   }
 
   return (
-    <CartContext.Provider value={{ addToCart, showCart, cart }}>
+    <CartContext.Provider value={{ addToCart, removeFromCart, cart }}>
       {children}
     </CartContext.Provider>
   );

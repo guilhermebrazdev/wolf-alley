@@ -7,7 +7,7 @@ import { Card, InfoBox } from "./style";
 
 const ProductCard = ({ product }) => {
   const { formatarReal } = ProductCtxt();
-  const { addToCart, showCart } = CartCtxt();
+  const { addToCart } = CartCtxt();
 
   return (
     <Card>

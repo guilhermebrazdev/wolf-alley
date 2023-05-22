@@ -13,6 +13,8 @@ export const ProductsContainer = styled.div`
 `;
 
 export const ProductsBox = styled.div`
+  margin-top: 32px;
+  margin-bottom: 16px;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;

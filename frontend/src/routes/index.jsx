@@ -1,6 +1,6 @@
 import { Switch } from "react-router-dom";
 
-import { Login, Dashboard, SignUp, Home, Cart } from "../pages";
+import { Login, Dashboard, SignUp, Home, Cart, Profile } from "../pages";
 
 import Rota from "./route";
 
@@ -12,6 +12,7 @@ const Routes = () => {
       <Rota path="/signUp" Component={SignUp} />
       <Rota path="/dashboard" Component={Dashboard} isPrivate />
       <Rota path="/cart" Component={Cart} isPrivate />
+      <Rota path="/profile" Component={Profile} isPrivate />
     </Switch>
   );
 };

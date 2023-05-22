@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 
 const CartContext = createContext();
 
@@ -23,6 +24,7 @@ export const CartProvider = ({ children }) => {
 
       localStorage.setItem("@WolfAlley:Cart", JSON.stringify(cart));
     }
+    toast.success("Produto adicionado!");
   }
 
   function removeFromCart(product) {
@@ -43,8 +45,20 @@ export const CartProvider = ({ children }) => {
     }
   }
 
+  function calculatePrice() {
+    const totalPrice = cart.reduce(
+      (acc, currentProduct) =>
+        acc + currentProduct.price * currentProduct.quantity,
+      0
+    );
+
+    return totalPrice;
+  }
+
   return (
-    <CartContext.Provider value={{ addToCart, removeFromCart, cart }}>
+    <CartContext.Provider
+      value={{ addToCart, removeFromCart, setCart, cart, calculatePrice }}
+    >
       {children}
     </CartContext.Provider>
   );

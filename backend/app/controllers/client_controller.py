@@ -35,8 +35,6 @@ def insert_client():
             raise i.orig
     
     except WrongKeys:
-        print("WRONGÃO")
-
         return {"error": "Chaves inválidas!"}, HTTPStatus.BAD_REQUEST
    
     except InvalidValues:

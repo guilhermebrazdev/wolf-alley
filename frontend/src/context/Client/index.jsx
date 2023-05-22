@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
 import { useHistory } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 import api from "../../services/api";
 import { LoginSchema, SignUpSchema } from "../../schemas";
@@ -20,6 +21,11 @@ export const ClientProvider = ({ children }) => {
     resolver: yupResolver(SignUpSchema),
     resolver: yupResolver(LoginSchema),
   });
+
+  function logout() {
+    localStorage.clear();
+    history.push("/");
+  }
 
   async function signUp(data) {
     data.isAdm = false;
@@ -53,11 +59,22 @@ export const ClientProvider = ({ children }) => {
         console.log(`Erro: ${err.response.data.error}`);
       });
   }
+
+  const [token, setToken] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
+  const [client, setclient] = useState({});
 
   function authenticating() {
     const token = localStorage.getItem("@WolfAlley:Token");
 
+    if (token) {
+      setToken(token);
+      const usuario = jwt_decode(token);
+
+      setclient(usuario);
+    } else {
+      setclient({});
+    }
     setAuthenticated(!!token);
   }
 
@@ -79,10 +96,13 @@ export const ClientProvider = ({ children }) => {
         register,
         handleSubmit,
         errors,
+        logout,
         signUp,
         login,
+        token,
         authenticating,
         authenticated,
+        client,
         authPath,
         nonAuthPath,
       }}

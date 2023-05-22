@@ -3,20 +3,18 @@ import { Redirect, Route } from "react-router-dom";
 import { ClientCtxt } from "../context/Client";
 
 const Rota = ({ isPrivate = false, Component }) => {
-  const { authenticating } = ClientCtxt();
+  const { authenticating, authenticated } = ClientCtxt();
 
   useEffect(() => {
     authenticating();
   }, [Component]);
 
-  const token = localStorage.getItem("@WolfAlley:Token");
-
   return (
     <Route>
-      {isPrivate === !!token ? (
+      {isPrivate === !!authenticated ? (
         <Component />
       ) : (
-        <Redirect to={token ? "/dashboard" : "/"} />
+        <Redirect to={authenticated ? "/dashboard" : "/"} />
       )}
     </Route>
   );

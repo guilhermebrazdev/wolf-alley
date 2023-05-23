@@ -5,9 +5,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: pink;
-  height: 250px;
+  height: 300px;
   width: 300px;
   padding: 4px 8px;
+  gap: 8px;
 
   background: var(--darkBlue);
 
@@ -43,6 +44,21 @@ export const Container = styled.div`
       width: 100%;
       height: 100%;
       text-align: left;
+    }
+    > div {
+      /* background: orange; */
+      width: 100%;
+
+      #logout {
+        > button {
+          width: 120px;
+          height: 40px;
+          font-size: 1.5rem;
+          font-weight: 900;
+          color: var(--waterGreen);
+          background: var(--beige);
+        }
+      }
     }
   }
 `;

@@ -49,8 +49,12 @@ const ClientCard = () => {
         <h2>{formatCpf(client.cpf)}</h2>
         <h2>{client.email}</h2>
         <h2>{getAge(client.birthday)} anos</h2>
+        <div>
+          <Button id="logout" onClick={() => logout()}>
+            Sair
+          </Button>
+        </div>
       </section>
-      <Button onClick={() => logout()}>Sair</Button>
     </Container>
   );
 };

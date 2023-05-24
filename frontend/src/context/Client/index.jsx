@@ -5,6 +5,11 @@ import { toast } from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
+import business_man from "../../assets/icones/business_man.png";
+import girl from "../../assets/icones/girl.png";
+import man from "../../assets/icones/man.png";
+import woman from "../../assets/icones/woman.png";
+
 import api from "../../services/api";
 import { LoginSchema, SignUpSchema } from "../../schemas";
 
@@ -89,6 +94,22 @@ export const ClientProvider = ({ children }) => {
     secOpt: { path: "/cart", value: "Carrinho" },
     thirdOpt: { path: "/profile", value: "Perfil" },
   };
+  //----------------------------AVATAR-------------------------------//
+
+  const [avatarModal, setAvatarModal] = useState(false);
+  const [currentAvatar, setCurrentAvatar] = useState(business_man);
+
+  const avatarIcons = [
+    { img_path: man },
+    { img_path: girl },
+    { img_path: woman },
+    { img_path: business_man },
+  ];
+
+  function pickAvatar(avatar_path) {
+    setCurrentAvatar(avatar_path);
+    setAvatarModal(false);
+  }
 
   return (
     <ClientContext.Provider
@@ -105,6 +126,12 @@ export const ClientProvider = ({ children }) => {
         client,
         authPath,
         nonAuthPath,
+        currentAvatar,
+        setCurrentAvatar,
+        avatarIcons,
+        avatarModal,
+        setAvatarModal,
+        pickAvatar,
       }}
     >
       {children}

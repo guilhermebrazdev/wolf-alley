@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Card = styled.div`
   background: var(--lightGreen);
   height: 300px;
-  width: 200px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -43,7 +43,7 @@ export const InfoBox = styled.div`
 
     #buyButton {
       > button {
-        width: 160px;
+        width: 290px;
         height: 40px;
         font-size: 1.5rem;
         font-weight: 900;

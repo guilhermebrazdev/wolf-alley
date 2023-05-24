@@ -21,6 +21,7 @@ export const Container = styled.div`
 
     > img {
       width: 120px;
+      cursor: pointer;
     }
   }
   #info {

@@ -1,10 +1,10 @@
-import { Container } from "./style";
-import man from "../../../assets/icones/man.png";
-import { ClientCtxt } from "../../../context/Client";
 import Button from "../../Button";
+import { ClientCtxt } from "../../../context/Client";
+
+import { Container } from "./style";
 
 const ClientCard = () => {
-  const { client, logout } = ClientCtxt();
+  const { client, logout, setAvatarModal, currentAvatar } = ClientCtxt();
 
   function formatCpf(cpf) {
     const formatedCpf = `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(
@@ -42,7 +42,11 @@ const ClientCard = () => {
   return (
     <Container>
       <section id="facePic">
-        <img src={man} alt="profile_pic" />
+        <img
+          src={currentAvatar}
+          alt="profile_pic"
+          onClick={() => setAvatarModal(true)}
+        />
       </section>
       <section id="info">
         <h1>{client.name}</h1>

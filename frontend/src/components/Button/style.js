@@ -6,9 +6,7 @@ export const Container = styled.div`
     min-width: 100px;
     min-height: 30px;
     border-radius: 8px;
-    :hover {
-      transform: scale(1.06);
-    }
+
     cursor: pointer;
     transition: 0.2s;
   }
